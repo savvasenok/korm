@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "korm"
 include(":app")
- 
+include(":korm")
