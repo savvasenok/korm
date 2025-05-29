@@ -5,6 +5,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -15,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import xyz.savvamirzoyan.android.korm.model.KormDropdownModel
 import xyz.savvamirzoyan.android.korm.ui.preview.KormPreviewTheme
 import xyz.savvamirzoyan.android.korm.ui.preview.models.kormDropdownModels
 import xyz.savvamirzoyan.android.korm.ui.text.KormTextInput
@@ -22,10 +24,10 @@ import xyz.savvamirzoyan.android.korm.ui.text.LocalKormIsReadOnly
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun KormDropdownPicker(
+internal fun KormDropdownPicker(
     modifier: Modifier = Modifier,
     model: KormDropdownModel,
-    onSelect: (index: Int) -> Unit
+    onSelect: (fieldId: String, index: Int) -> Unit
 ) {
 
     var expanded by remember { mutableStateOf(false) }
@@ -34,7 +36,7 @@ fun KormDropdownPicker(
         modifier = modifier.fillMaxWidth(),
         expanded = expanded,
         onExpandedChange = {
-            expanded = it// && model.value.enabled
+            expanded = it && model.value.enabled
         },
     ) {
 
@@ -42,7 +44,8 @@ fun KormDropdownPicker(
             KormTextInput(
                 modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
                 model = model.value,
-                onChange = { /* is not invoked, bc is "read-only" */ }
+                onChange = { _, _ -> /* is not invoked, bc is "read-only" */ },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) }
             )
 
             ExposedDropdownMenu(
@@ -59,7 +62,7 @@ fun KormDropdownPicker(
                             )
                         },
                         onClick = {
-                            onSelect(index)
+                            onSelect(model.fieldId, index)
                             expanded = false
                         },
                     )
@@ -76,7 +79,7 @@ private fun KormOutlinedDropdownPickerPreview() {
         for (model in kormDropdownModels) {
             KormDropdownPicker(
                 model = model,
-                onSelect = {}
+                onSelect = { _, _ -> }
             )
         }
     }
