@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    `maven-publish`
 }
 
 android {
@@ -25,11 +26,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_23
+        targetCompatibility = JavaVersion.VERSION_23
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "23"
     }
     buildFeatures {
         compose = true
@@ -62,4 +63,37 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                from(components["release"])
+
+                groupId = "xyz.savvamirzoyan.android"
+                artifactId = "korm"
+                version = "2025.06-unstable"
+
+                pom {
+                    name.set("Korm: Kotlin Form")
+                    description.set("A suite of UI components and classes to handle common logic and error handling for user input")
+                    url.set("https://github.com/savvasenok/korm")
+
+                    licenses {
+                        license {
+                            name.set("The MIT License (MIT)")
+                            url.set("https://mit-license.org")
+                        }
+                    }
+
+                    developers {
+                        developers {
+                            name.set("Savva Mirzoyan")
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

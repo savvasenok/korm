@@ -1,31 +1,35 @@
 package xyz.savvamirzoyan.android.korm.ui.preview.models
 
+import xyz.savvamirzoyan.android.korm.model.KormFieldId
 import xyz.savvamirzoyan.android.korm.model.KormNumberInputModel
 import xyz.savvamirzoyan.android.korm.ui.preview.Constants
 
 internal val kormNumberInputModels = listOf(
     // Empty
-    KormNumberInputModel(""),
+    KormNumberInputModel(KormFieldId.empty()),
 
     // Only main word and sentence
-    KormNumberInputModel("", Constants.WORD),
-    KormNumberInputModel("", Constants.SENTENCE),
+    KormNumberInputModel(KormFieldId.empty(), Constants.WORD),
+    KormNumberInputModel(KormFieldId.empty(), Constants.SENTENCE),
 
     // Disabled empty
-    KormNumberInputModel("").copy(enabled = false),
+    KormNumberInputModel(KormFieldId.empty()).copy(enabled = false),
 
     // Disabled non-empty
-    KormNumberInputModel("", Constants.WORD).copy(enabled = false),
+    KormNumberInputModel(KormFieldId.empty(), Constants.WORD).copy(enabled = false),
 
     // Error empty
-    KormNumberInputModel("").copy(error = Constants.SENTENCE),
+    KormNumberInputModel(KormFieldId.empty()).copy(error = Constants.SENTENCE),
 
     // Error non-empty
-    KormNumberInputModel("", Constants.WORD).copy(error = Constants.SENTENCE),
+    KormNumberInputModel(KormFieldId.empty(), Constants.WORD).copy(error = Constants.SENTENCE),
 
     // Error non-empty and disabled
-    KormNumberInputModel("", Constants.WORD).copy(enabled = false, error = Constants.SENTENCE),
+    KormNumberInputModel(KormFieldId.empty(), Constants.WORD).copy(
+        enabled = false,
+        error = Constants.SENTENCE
+    ),
 
     // Long text
-    KormNumberInputModel("", Constants.TEXT),
+    KormNumberInputModel(KormFieldId.empty(), Constants.TEXT),
 )

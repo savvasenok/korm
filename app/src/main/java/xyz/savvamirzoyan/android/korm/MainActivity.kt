@@ -15,6 +15,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -23,10 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import xyz.savvamirzoyan.android.korm.contract.BaseKormFieldManager
 import xyz.savvamirzoyan.android.korm.ui.KormFieldUi
 import xyz.savvamirzoyan.android.korm.ui.compositions.KormInputStyle
 import xyz.savvamirzoyan.android.korm.ui.compositions.LocalKormInputPreferredStyle
@@ -34,16 +32,7 @@ import xyz.savvamirzoyan.android.korm.ui.theme.KormTheme
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: MainViewModel by viewModels(
-        factoryProducer = {
-            object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    val manager = BaseKormFieldManager()
-                    return MainViewModel(manager, manager) as T
-                }
-            }
-        }
-    )
+    private val viewModel: MainViewModel by viewModels()
 
     @OptIn(ExperimentalMaterial3ExpressiveApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,7 +66,7 @@ class MainActivity : ComponentActivity() {
 
                                 CompositionLocalProvider(LocalKormInputPreferredStyle provides styles[counter % styles.size]) {
                                     Card(
-                                        colors = CardDefaults.elevatedCardColors()
+                                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
                                     ) {
                                         Column(
                                             modifier = Modifier.padding(16.dp),

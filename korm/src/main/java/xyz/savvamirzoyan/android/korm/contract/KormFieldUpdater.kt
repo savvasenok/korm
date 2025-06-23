@@ -1,14 +1,11 @@
 package xyz.savvamirzoyan.android.korm.contract
 
-import kotlinx.coroutines.flow.StateFlow
-import xyz.savvamirzoyan.android.korm.model.KormFieldModel
+import xyz.savvamirzoyan.android.korm.model.KormFieldId
 
 interface KormFieldUpdater {
 
-    val uiFlow: StateFlow<List<KormFieldModel>>
-
-    fun update(fieldId: String, value: Boolean)
-    fun update(fieldId: String, index: Int)
-    fun updateText(fieldId: String, text: String)
-    fun updateNumber(fieldId: String, number: String)
+    fun update(fieldId: KormFieldId, value: Boolean)
+    fun update(fieldId: KormFieldId, index: Int)
+    fun updateText(fieldId: KormFieldId, text: String)
+    fun updateNumber(fieldId: KormFieldId, number: String)
 }

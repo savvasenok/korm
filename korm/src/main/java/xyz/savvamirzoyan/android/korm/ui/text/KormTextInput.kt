@@ -16,18 +16,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import xyz.savvamirzoyan.android.korm.model.KormFieldId
 import xyz.savvamirzoyan.android.korm.model.KormTextInputModel
 import xyz.savvamirzoyan.android.korm.ui.compositions.KormInputStyle
 import xyz.savvamirzoyan.android.korm.ui.compositions.LocalKormInputPreferredStyle
 import xyz.savvamirzoyan.android.korm.ui.preview.KormPreviewTheme
 import xyz.savvamirzoyan.android.korm.ui.preview.models.kormTextInputModels
+import xyz.savvamirzoyan.android.korm.utils.toClearableTrailingIcon
 
 
 @Composable
-internal fun KormTextInput(
+fun KormTextInput(
     modifier: Modifier = Modifier,
     model: KormTextInputModel,
-    onChange: (fieldId: String, text: String) -> Unit
+    onChange: (id: KormFieldId, text: String) -> Unit
 ) {
     val trailingIcon: (@Composable () -> Unit)? = model.icon
         ?.let { icon -> { Icon(icon, contentDescription = null) } }
@@ -41,11 +43,11 @@ internal fun KormTextInput(
 }
 
 @Composable
-internal fun KormTextInput(
+fun KormTextInput(
     modifier: Modifier = Modifier,
     model: KormTextInputModel,
     trailingIcon: (@Composable () -> Unit)?,
-    onChange: (fieldId: String, text: String) -> Unit
+    onChange: (id: KormFieldId, text: String) -> Unit
 ) {
 
     var lastError by remember { mutableStateOf<String?>(null) }
@@ -61,6 +63,9 @@ internal fun KormTextInput(
     val placeholder: (@Composable () -> Unit)? = model.placeholder
         ?.let { placeholder -> { Text(placeholder) } }
 
+    val overwrittenTrailingIcon = trailingIcon
+        .toClearableTrailingIcon(model.value, model.enabled) { onChange(model.fieldId, "") }
+
     Column {
 
         val style = LocalKormInputPreferredStyle.current
@@ -68,12 +73,12 @@ internal fun KormTextInput(
         if (style == KormInputStyle.OUTLINE) {
             OutlinedTextField(
                 modifier = modifier.fillMaxWidth(),
-                value = model.value.text,
+                value = model.value,
                 enabled = model.enabled,
                 isError = model.error != null,
                 maxLines = 3,
                 readOnly = LocalKormIsReadOnly.current,
-                trailingIcon = trailingIcon,
+                trailingIcon = overwrittenTrailingIcon,
                 label = label,
                 placeholder = placeholder,
                 onValueChange = { onChange(model.fieldId, it) },
@@ -81,12 +86,12 @@ internal fun KormTextInput(
         } else if (style == KormInputStyle.FILLED) {
             TextField(
                 modifier = modifier.fillMaxWidth(),
-                value = model.value.text,
+                value = model.value,
                 enabled = model.enabled,
                 isError = model.error != null,
                 maxLines = 3,
                 readOnly = LocalKormIsReadOnly.current,
-                trailingIcon = trailingIcon,
+                trailingIcon = overwrittenTrailingIcon,
                 label = label,
                 placeholder = placeholder,
                 onValueChange = { onChange(model.fieldId, it) },

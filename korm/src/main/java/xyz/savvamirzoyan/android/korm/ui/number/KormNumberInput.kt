@@ -18,17 +18,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import xyz.savvamirzoyan.android.korm.model.KormFieldId
 import xyz.savvamirzoyan.android.korm.model.KormNumberInputModel
 import xyz.savvamirzoyan.android.korm.ui.compositions.KormInputStyle
 import xyz.savvamirzoyan.android.korm.ui.compositions.LocalKormInputPreferredStyle
 import xyz.savvamirzoyan.android.korm.ui.preview.KormPreviewTheme
 import xyz.savvamirzoyan.android.korm.ui.preview.models.kormNumberInputModels
+import xyz.savvamirzoyan.android.korm.utils.toClearableTrailingIcon
 
 @Composable
-internal fun KormNumberInput(
+fun KormNumberInput(
     modifier: Modifier = Modifier,
     model: KormNumberInputModel,
-    onChange: (fieldId: String, text: String) -> Unit
+    onChange: (id: KormFieldId, text: String) -> Unit
 ) {
     val trailingIcon: (@Composable () -> Unit)? = model.icon
         ?.let { icon -> { Icon(icon, contentDescription = null) } }
@@ -42,11 +44,11 @@ internal fun KormNumberInput(
 }
 
 @Composable
-internal fun KormNumberInput(
+fun KormNumberInput(
     modifier: Modifier = Modifier,
     model: KormNumberInputModel,
     trailingIcon: (@Composable () -> Unit)?,
-    onChange: (fieldId: String, text: String) -> Unit
+    onChange: (id: KormFieldId, text: String) -> Unit
 ) {
 
     var lastError by remember { mutableStateOf<String?>(null) }
@@ -62,6 +64,9 @@ internal fun KormNumberInput(
     val placeholder: (@Composable () -> Unit)? = model.placeholder
         ?.let { placeholder -> { Text(placeholder) } }
 
+    val overwrittenTrailingIcon = trailingIcon
+        .toClearableTrailingIcon(model.value.text, model.enabled) { onChange(model.fieldId, "") }
+
     Column {
 
         val style = LocalKormInputPreferredStyle.current
@@ -73,7 +78,7 @@ internal fun KormNumberInput(
                 enabled = model.enabled,
                 isError = model.error != null,
                 maxLines = 3,
-                trailingIcon = trailingIcon,
+                trailingIcon = overwrittenTrailingIcon,
                 label = label,
                 placeholder = placeholder,
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
@@ -86,7 +91,7 @@ internal fun KormNumberInput(
                 enabled = model.enabled,
                 isError = model.error != null,
                 maxLines = 3,
-                trailingIcon = trailingIcon,
+                trailingIcon = overwrittenTrailingIcon,
                 label = label,
                 placeholder = placeholder,
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),

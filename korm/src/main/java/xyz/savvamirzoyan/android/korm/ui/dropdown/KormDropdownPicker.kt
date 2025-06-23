@@ -17,17 +17,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import xyz.savvamirzoyan.android.korm.model.KormDropdownModel
+import xyz.savvamirzoyan.android.korm.model.KormFieldId
 import xyz.savvamirzoyan.android.korm.ui.preview.KormPreviewTheme
 import xyz.savvamirzoyan.android.korm.ui.preview.models.kormDropdownModels
 import xyz.savvamirzoyan.android.korm.ui.text.KormTextInput
+import xyz.savvamirzoyan.android.korm.ui.text.LocalKormAllowClearTrailingIcon
 import xyz.savvamirzoyan.android.korm.ui.text.LocalKormIsReadOnly
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun KormDropdownPicker(
+fun KormDropdownPicker(
     modifier: Modifier = Modifier,
     model: KormDropdownModel,
-    onSelect: (fieldId: String, index: Int) -> Unit
+    onSelect: (id: KormFieldId, index: Int) -> Unit
 ) {
 
     var expanded by remember { mutableStateOf(false) }
@@ -39,8 +41,10 @@ internal fun KormDropdownPicker(
             expanded = it && model.value.enabled
         },
     ) {
-
-        CompositionLocalProvider(LocalKormIsReadOnly provides true) {
+        CompositionLocalProvider(
+            LocalKormIsReadOnly provides true,
+            LocalKormAllowClearTrailingIcon provides false
+        ) {
             KormTextInput(
                 modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
                 model = model.value,

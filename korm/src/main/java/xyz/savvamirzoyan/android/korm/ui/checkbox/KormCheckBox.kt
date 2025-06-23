@@ -19,6 +19,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import xyz.savvamirzoyan.android.korm.model.KormCheckBoxModel
+import xyz.savvamirzoyan.android.korm.model.KormFieldId
 import xyz.savvamirzoyan.android.korm.ui.preview.KormPreviewTheme
 import xyz.savvamirzoyan.android.korm.ui.preview.models.kormCheckBoxModels
 
@@ -31,10 +32,10 @@ import xyz.savvamirzoyan.android.korm.ui.preview.models.kormCheckBoxModels
 private val TextFieldHeight = 56.dp
 
 @Composable
-internal fun KormCheckBox(
+fun KormCheckBox(
     modifier: Modifier = Modifier,
     model: KormCheckBoxModel,
-    onCheckedChange: (fieldId: String, value: Boolean) -> Unit
+    onCheckedChange: (id: KormFieldId, value: Boolean) -> Unit
 ) {
 
     Row(
